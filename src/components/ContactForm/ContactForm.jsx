@@ -1,56 +1,62 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { FormEl } from './ContactForm.styled';
 
-class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
+const ContactForm = ({ AddContact }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleInputChange = event => {
+  const handleInputChange = event => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+
+    switch (name) {
+      case 'name':
+        setName(value);
+        break;
+
+      case 'number':
+        setNumber(value);
+        break;
+
+      default:
+        return;
+    }
   };
 
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const { name, number } = this.state;
 
-    this.setState({ name: '', number: '' });
-    this.props.AddContact(name, number);
+    AddContact(name, number);
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
-
-    return (
-      <FormEl>
-        <form onSubmit={this.handleSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              value={name}
-              required
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="text"
-              name="number"
-              value={number}
-              required
-              onChange={this.handleInputChange}
-            />
-          </label>
-          <button type="submit">Add contact</button>
-        </form>
-      </FormEl>
-    );
-  }
-}
+  return (
+    <FormEl>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Name
+          <input
+            type="text"
+            name="name"
+            value={name}
+            required
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Number
+          <input
+            type="text"
+            name="number"
+            value={number}
+            required
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="submit">Add contact</button>
+      </form>
+    </FormEl>
+  );
+};
 
 export default ContactForm;
